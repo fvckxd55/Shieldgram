@@ -33,12 +33,6 @@ classifiers = [
     "Topic :: Security",
 ]
 
-[project.urls]
-Homepage = "https://github.com/fvckxd55/Shieldgram"
-Repository = "https://github.com/fvckxd55/Shieldgram"
-"Bug Tracker" = "https://github.com/fvckxd55/Shieldgram/issues"
-Changelog = "https://github.com/fvckxd55/Shieldgram/blob/master/CHANGELOG.md"
-
 dependencies = [
     "aiogram>=3.7,<4.0",
     "redis[hiredis]>=5.0,<6.0",
@@ -63,6 +57,12 @@ dashboard = [
 all = [
     "shieldgram[dev,dashboard]",
 ]
+
+[project.urls]
+Homepage = "https://github.com/fvckxd55/Shieldgram"
+Repository = "https://github.com/fvckxd55/Shieldgram"
+"Bug Tracker" = "https://github.com/fvckxd55/Shieldgram/issues"
+Changelog = "https://github.com/fvckxd55/Shieldgram/blob/master/CHANGELOG.md"
 
 [tool.ruff]
 target-version = "py311"

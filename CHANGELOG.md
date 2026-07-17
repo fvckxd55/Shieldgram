@@ -2,6 +2,20 @@
 
 All notable changes to Shieldgram will be documented in this file.
 
+## [0.2.0] — 2026-07-17
+
+### Added
+- **Spam Detector** — Link detection (URL + t.me), advertising pattern matching (casino, crypto, "buy cheap", etc.)
+- **User Reputation System** — Redis-backed 0.0–1.0 scoring with penalty on attack and decay on normal behavior
+- **PostgreSQL Logger** — AsyncSQLAlchemy event store for audit trails and analytics (`detection_logs` table)
+- **Reputation Config** — `penalty` (0.15) and `decay` (0.95) tunable per deployment
+- **Spam Config** — `max_links_per_message` (3) and `ad_pattern_threshold` (2)
+
+### Changed
+- **ShieldConfig** — Added `spam_detector`, `reputation`, and `postgres_url` fields
+- **Shield middleware** — Integrated reputation engine, spam detector, and PostgreSQL logging
+- Bumped test suite from 26 to 37 tests
+
 ## [0.1.0] — 2026-07-17
 
 ### Added
@@ -19,4 +33,5 @@ All notable changes to Shieldgram will be documented in this file.
 - **Docker** — `docker-compose.yml` with Redis + bot setup
 - **PyPI** — Published as `shieldgram`
 
+[0.2.0]: https://github.com/fvckxd55/Shieldgram/releases/tag/v0.2.0
 [0.1.0]: https://github.com/fvckxd55/Shieldgram/releases/tag/v0.1.0

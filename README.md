@@ -1,5 +1,11 @@
 # 🛡️ Shieldgram
 
+[![PyPI version](https://img.shields.io/pypi/v/shieldgram?color=blue)](https://pypi.org/project/shieldgram/)
+[![Python](https://img.shields.io/pypi/pyversions/shieldgram)](https://pypi.org/project/shieldgram/)
+[![Tests](https://img.shields.io/github/actions/workflow/status/fvckxd55/Shieldgram/tests.yml?branch=master&label=tests)](https://github.com/fvckxd55/Shieldgram/actions)
+[![License](https://img.shields.io/pypi/l/shieldgram)](https://github.com/fvckxd55/Shieldgram/blob/master/LICENSE)
+[![Downloads](https://img.shields.io/pypi/dm/shieldgram)](https://pypi.org/project/shieldgram/)
+
 **Anti-abuse security middleware for Telegram bots.**
 
 Protect your bot from:
@@ -117,8 +123,8 @@ python examples/attack_simulator.py
 - **v0.1** — Middleware, Rate Limiter, Flood Detector, Threat Scoring
 - **v0.2** — Spam detection, Reputation system, PostgreSQL logs
 - **v0.3** — Dashboard, API, Docker deployment
-- **v1.0** — PyPI package, Plugin system
+- **v1.0** — Plugin system, production hardening
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE)

@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Anti-abuse security middleware for Telegram bots"
 readme = "README.md"
 license = "MIT"
-license-files = []
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 authors = [
     {name = "Shieldgram Team"},
@@ -32,6 +32,12 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Security",
 ]
+
+[project.urls]
+Homepage = "https://github.com/fvckxd55/Shieldgram"
+Repository = "https://github.com/fvckxd55/Shieldgram"
+"Bug Tracker" = "https://github.com/fvckxd55/Shieldgram/issues"
+Changelog = "https://github.com/fvckxd55/Shieldgram/blob/master/CHANGELOG.md"
 
 dependencies = [
     "aiogram>=3.7,<4.0",

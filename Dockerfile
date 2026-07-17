@@ -4,8 +4,9 @@ WORKDIR /app
 
 COPY pyproject.toml .
 COPY src/ src/
+COPY examples/ examples/
 
 RUN pip install --no-cache-dir . && \
     pip install --no-cache-dir aiogram[fast]
 
-CMD ["python", "-m", "examples.simple_bot"]
+CMD ["python", "examples/protected_bot.py"]

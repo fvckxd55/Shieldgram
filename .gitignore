@@ -28,6 +28,12 @@ env/
 
 # Tokens
 tokens.txt
+token.txt
+
+# Build
+dist/
+build/
+*.egg-info/
 
 # OS
 Thumbs.db

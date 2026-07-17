@@ -7,7 +7,8 @@ name = "shieldgram"
 version = "0.1.0"
 description = "Anti-abuse security middleware for Telegram bots"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
+license-files = []
 requires-python = ">=3.11"
 authors = [
     {name = "Shieldgram Team"},
@@ -28,7 +29,6 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Framework :: aiogram",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Security",

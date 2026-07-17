@@ -2,22 +2,22 @@
 
 from __future__ import annotations
 
-from botshield.config import BotShieldConfig, FloodDetectorConfig, RateLimiterConfig
+from shieldgram.config import FloodDetectorConfig, RateLimiterConfig, ShieldConfig
 
 
 class TestConfig:
     def test_default_config(self) -> None:
-        config = BotShieldConfig()
+        config = ShieldConfig()
         assert config.redis_url == "redis://localhost:6379/0"
         assert config.rate_limiter.enabled is True
         assert config.flood_detector.enabled is True
-        assert config.block_threshold == 0.8
-        assert config.warn_threshold == 0.5
+        assert config.block_threshold == 0.7
+        assert config.warn_threshold == 0.4
 
     def test_from_dict(self) -> None:
         data = {
             "redis_url": "redis://custom:6379/1",
-            "redis_key_prefix": "bs",
+            "redis_key_prefix": "sg",
             "rate_limiter": {
                 "sliding_window_seconds": 30,
                 "max_requests_per_window": 10,
@@ -29,9 +29,9 @@ class TestConfig:
             "block_threshold": 0.9,
             "ignore_users": [123, 456],
         }
-        config = BotShieldConfig.from_dict(data)
+        config = ShieldConfig.from_dict(data)
         assert config.redis_url == "redis://custom:6379/1"
-        assert config.redis_key_prefix == "bs"
+        assert config.redis_key_prefix == "sg"
         assert config.rate_limiter.sliding_window_seconds == 30
         assert config.rate_limiter.max_requests_per_window == 10
         assert config.rate_limiter.enabled is False

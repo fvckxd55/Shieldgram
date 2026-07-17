@@ -6,10 +6,10 @@ import asyncio
 
 from aiogram.types import Chat, Message, User
 
-from botshield.config import RateLimiterConfig
-from botshield.detectors.rate_limiter import RateLimiter
-from botshield.storage.redis import RedisStorage
-from botshield.types import DetectionVerdict
+from shieldgram.config import RateLimiterConfig
+from shieldgram.detectors.rate_limiter import RateLimiter
+from shieldgram.storage.redis import RedisStorage
+from shieldgram.types import DetectionVerdict
 
 
 def _make_message(user_id: int, text: str = "test") -> Message:
@@ -76,9 +76,7 @@ class TestRateLimiter:
         result = await detector.analyze(_make_message(2), {})
         assert result.verdict == DetectionVerdict.ALLOW
 
-    async def test_disabled_returns_allow(
-        self, redis_storage: RedisStorage
-    ) -> None:
+    async def test_disabled_returns_allow(self, redis_storage: RedisStorage) -> None:
         config = RateLimiterConfig(enabled=False)
         detector = RateLimiter(redis_storage, config)
 

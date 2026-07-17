@@ -1,4 +1,4 @@
-"""Слой хранения BotShield."""
+"""Слой хранения Shieldgram."""
 
 from .base import AbstractStorage
 from .redis import RedisStorage

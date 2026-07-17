@@ -1,29 +1,27 @@
-# BotShield
+# 🛡️ Shieldgram
 
-Open-source middleware для защиты Telegram-ботов от автоматизированных атак.
+**Anti-abuse security middleware for Telegram bots.**
 
-## Возможности
-
-- **Rate Limiting** — Sliding Window + Token Bucket
-- **Flood Detection** — обнаружение взрывной частоты и повторов контента
-- **Подключается без изменения бизнес-логики**
-
-## Установка
+Protect your bot from:
+- ✅ Flood attacks
+- ✅ Spam
+- ✅ Command abuse
+- ✅ Automated users
 
 ```bash
-pip install botshield
+pip install shieldgram
 ```
 
-## Быстрый старт
+## Quick Start
 
 ```python
 from aiogram import Bot, Dispatcher, Router
 from aiogram.filters import Command
 from aiogram.types import Message
-from botshield import BotShield
+from shieldgram import Shield
 
 router = Router()
-shield = BotShield(redis="redis://localhost:6379/0")
+shield = Shield(redis="redis://localhost:6379/0")
 
 @router.message(Command("start"))
 async def cmd_start(message: Message) -> None:
@@ -37,10 +35,44 @@ async def main():
     await dp.start_polling(bot)
 ```
 
-## Конфигурация
+## Threat Score Engine
+
+Shieldgram assigns a threat score to every user action:
+
+| Signal              | Weight |
+|---------------------|--------|
+| Flood (burst)       | +0.40  |
+| Spam (repeat)       | +0.30  |
+| Too many links      | +0.20  |
+| Suspicious behavior | +0.10  |
+
+| Score    | Verdict |
+|----------|---------|
+| 0.0–0.4  | ALLOW   |
+| 0.4–0.7  | WARN    |
+| 0.7–1.0  | BLOCK   |
+
+## Architecture
+
+```
+Telegram Update → Shield Middleware → Detection Engine
+                                          │
+                              ┌───────────┼───────────┐
+                         RateLimiter  FloodDetector  ...
+                              │           │
+                              └───────────┘
+                                    │
+                            Threat Score Engine
+                                    │
+                            Decision Engine
+                               │        │
+                           Redis    PostgreSQL
+```
+
+## Configuration
 
 ```python
-shield = BotShield(
+shield = Shield(
     redis="redis://localhost:6379/0",
     rate_limiter={
         "sliding_window_seconds": 60,
@@ -54,18 +86,39 @@ shield = BotShield(
         "repeat_window_seconds": 30,
         "repeat_threshold": 5,
     },
-    block_threshold=0.8,
-    warn_threshold=0.5,
+    block_threshold=0.7,
+    warn_threshold=0.4,
     ignore_users=[123456789],
 )
 ```
 
-## Docker
+## Run the demo
 
 ```bash
 docker compose up -d
 ```
 
-## Лицензия
+Or locally:
+
+```bash
+pip install shieldgram
+export BOT_TOKEN="your_token"
+python examples/protected_bot.py
+```
+
+Then attack it:
+
+```bash
+python examples/attack_simulator.py
+```
+
+## Roadmap
+
+- **v0.1** — Middleware, Rate Limiter, Flood Detector, Threat Scoring
+- **v0.2** — Spam detection, Reputation system, PostgreSQL logs
+- **v0.3** — Dashboard, API, Docker deployment
+- **v1.0** — PyPI package, Plugin system
+
+## License
 
 MIT

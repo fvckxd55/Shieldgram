@@ -69,7 +69,7 @@ end
 class RedisStorage(AbstractStorage):
     """Redis-бекенд для BotShield."""
 
-    def __init__(self, redis_url: str, key_prefix: str = "botshield") -> None:
+    def __init__(self, redis_url: str, key_prefix: str = "shieldgram") -> None:
         self._redis_url = redis_url
         self._key_prefix = key_prefix
         self._client: redis.Redis | None = None

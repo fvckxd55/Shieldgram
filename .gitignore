@@ -26,6 +26,9 @@ env/
 .ruff_cache/
 .pytest_cache/
 
+# Tokens
+tokens.txt
+
 # OS
 Thumbs.db
 .DS_Store

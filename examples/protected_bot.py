@@ -1,9 +1,9 @@
-"""Пример Telegram-бота с BotShield-защитой.
+"""Пример защищённого Telegram-бота с Shieldgram.
 
 Запуск:
     1. Подними Redis: docker run -d -p 6379:6379 redis:7-alpine
     2. Установи BOT_TOKEN в переменные окружения
-    3. Запусти: python examples/simple_bot.py
+    3. Запусти: python examples/protected_bot.py
 """
 
 import asyncio
@@ -13,13 +13,13 @@ from aiogram import Bot, Dispatcher, Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
-from botshield import BotShield
+from shieldgram import Shield
 
 router = Router(name="main")
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 
-shield = BotShield(
+shield = Shield(
     redis="redis://localhost:6379/0",
     rate_limiter={
         "sliding_window_seconds": 60,
@@ -33,25 +33,25 @@ shield = BotShield(
         "repeat_window_seconds": 30,
         "repeat_threshold": 5,
     },
-    block_threshold=0.8,
-    warn_threshold=0.5,
-    ignore_users=os.environ.get("BOT_ADMINS", "").split(","),
 )
 
 
 @router.message(Command("start"))
 async def cmd_start(message: Message) -> None:
-    await message.answer("Привет! Я бот с защитой BotShield.")
+    await message.answer(
+        "\U0001f6e1\ufe0f **Shieldgram** is protecting this bot.\n\n"
+        "Try spamming me — you'll get blocked!"
+    )
 
 
 @router.message(Command("help"))
 async def cmd_help(message: Message) -> None:
-    await message.answer("Я просто отвечаю на любое сообщение. Попробуй отправить что-нибудь!")
+    await message.answer("Send me any message and I'll echo it back.")
 
 
 @router.message()
 async def echo(message: Message) -> None:
-    await message.answer(f"Ты написал: {message.text}")
+    await message.answer(f"You wrote: {message.text}")
 
 
 async def main() -> None:

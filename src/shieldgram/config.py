@@ -1,4 +1,4 @@
-"""Конфигурация BotShield."""
+"""Конфигурация Shieldgram."""
 
 from __future__ import annotations
 
@@ -8,8 +8,6 @@ from typing import Any
 
 @dataclass
 class RateLimiterConfig:
-    """Настройки Rate Limiter."""
-
     sliding_window_seconds: float = 60.0
     max_requests_per_window: int = 30
     token_bucket_rate: float = 5.0
@@ -19,8 +17,6 @@ class RateLimiterConfig:
 
 @dataclass
 class FloodDetectorConfig:
-    """Настройки Flood Detector."""
-
     burst_window_seconds: float = 5.0
     burst_threshold: int = 10
     repeat_window_seconds: float = 30.0
@@ -29,17 +25,17 @@ class FloodDetectorConfig:
 
 
 @dataclass
-class BotShieldConfig:
-    """Главная конфигурация BotShield."""
+class ShieldConfig:
+    """Главная конфигурация Shieldgram."""
 
     redis_url: str = "redis://localhost:6379/0"
-    redis_key_prefix: str = "botshield"
+    redis_key_prefix: str = "shieldgram"
 
     rate_limiter: RateLimiterConfig = field(default_factory=RateLimiterConfig)
     flood_detector: FloodDetectorConfig = field(default_factory=FloodDetectorConfig)
 
-    block_threshold: float = 0.8
-    warn_threshold: float = 0.5
+    block_threshold: float = 0.7
+    warn_threshold: float = 0.4
     warn_message: str = (
         "\u26a0\ufe0f "
         "\u041e\u0431\u043d\u0430\u0440\u0443\u0436\u0435\u043d\u0430 "
@@ -52,13 +48,12 @@ class BotShieldConfig:
     ignore_users: list[int] = field(default_factory=list)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> BotShieldConfig:
-        """Создать конфигурацию из словаря."""
+    def from_dict(cls, data: dict[str, Any]) -> ShieldConfig:
         rl_data: dict[str, Any] = data.get("rate_limiter", {})
         fd_data: dict[str, Any] = data.get("flood_detector", {})
         return cls(
             redis_url=str(data.get("redis_url", "redis://localhost:6379/0")),
-            redis_key_prefix=str(data.get("redis_key_prefix", "botshield")),
+            redis_key_prefix=str(data.get("redis_key_prefix", "shieldgram")),
             rate_limiter=RateLimiterConfig(
                 sliding_window_seconds=float(rl_data.get("sliding_window_seconds", 60.0)),
                 max_requests_per_window=int(rl_data.get("max_requests_per_window", 30)),
@@ -73,7 +68,7 @@ class BotShieldConfig:
                 repeat_threshold=int(fd_data.get("repeat_threshold", 5)),
                 enabled=bool(fd_data.get("enabled", True)),
             ),
-            block_threshold=float(data.get("block_threshold", 0.8)),
-            warn_threshold=float(data.get("warn_threshold", 0.5)),
+            block_threshold=float(data.get("block_threshold", 0.7)),
+            warn_threshold=float(data.get("warn_threshold", 0.4)),
             ignore_users=list(data.get("ignore_users", [])),
         )

@@ -1,4 +1,4 @@
-"""BotShield Middleware — главный защитный слой."""
+"""Shieldgram Middleware — главный защитный слой для aiogram."""
 
 from __future__ import annotations
 
@@ -9,7 +9,8 @@ import structlog
 from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject
 
-from ..config import BotShieldConfig
+from ..config import ShieldConfig
+from ..core.scoring import ThreatScoreEngine
 from ..detectors.flood_detector import FloodDetector
 from ..detectors.rate_limiter import RateLimiter
 from ..engine.decision import DecisionEngine
@@ -20,15 +21,14 @@ from ..types import DetectionVerdict
 logger = structlog.get_logger()
 
 
-class BotShield(BaseMiddleware):
+class Shield(BaseMiddleware):
     """Главный middleware для защиты Telegram-бота.
 
-    Подключается как middleware к aiogram Router или Dispatcher.
+    Подключается одной строкой:
 
-    Пример:
-        from botshield import BotShield
+        from shieldgram import Shield
 
-        shield = BotShield(redis="redis://localhost:6379/0")
+        shield = Shield(redis="redis://localhost:6379/0")
         dp.message.middleware(shield)
     """
 
@@ -36,7 +36,7 @@ class BotShield(BaseMiddleware):
         self, redis: str = "redis://localhost:6379/0", **kwargs: Any
     ) -> None:
         config_data: dict[str, Any] = {"redis_url": redis, **kwargs}
-        self._config = BotShieldConfig.from_dict(config_data)
+        self._config = ShieldConfig.from_dict(config_data)
 
         self._storage = RedisStorage(
             redis_url=self._config.redis_url,
@@ -48,26 +48,25 @@ class BotShield(BaseMiddleware):
             FloodDetector(self._storage, self._config.flood_detector),
         ]
 
+        self._scoring = ThreatScoreEngine()
         self._detection_engine = DetectionEngine(self._detectors)
         self._decision_engine = DecisionEngine(self._config)
 
         self._started = False
 
     async def startup(self) -> None:
-        """Инициализировать хранилище и детекторы."""
         if self._started:
             return
         await self._storage.connect()
         await self._detection_engine.startup()
         self._started = True
-        logger.info("botshield_started")
+        logger.info("shieldgram_started")
 
     async def shutdown(self) -> None:
-        """Корректно завершить работу."""
         await self._detection_engine.shutdown()
         await self._storage.disconnect()
         self._started = False
-        logger.info("botshield_stopped")
+        logger.info("shieldgram_stopped")
 
     async def __call__(
         self,
@@ -83,14 +82,31 @@ class BotShield(BaseMiddleware):
             return await handler(event, data)
 
         results = await self._detection_engine.analyze(event, data)
+
+        flood_score = 0.0
+        spam_score = 0.0
+        for r in results:
+            if r.detector_name == "flood_detector":
+                flood_score = r.score
+                if r.metadata.get("repeat_score", 0) > 0.3:
+                    spam_score = r.metadata["repeat_score"]
+            elif r.detector_name == "rate_limiter":
+                pass
+
+        threat = self._scoring.compute(flood=flood_score, spam=spam_score)
+
         decision = self._decision_engine.decide(results)
 
+        if threat.total >= self._config.block_threshold:
+            decision = self._decision_engine.override_block(results, str(threat.total))
+
         logger.info(
-            "botshield_check",
+            "shieldgram_check",
             user_id=user_id,
             verdict=decision.verdict.name,
             score=round(decision.score, 3),
-            reason=decision.reason,
+            threat=threat.total,
+            breakdown=threat.breakdown,
         )
 
         if decision.verdict == DetectionVerdict.BLOCK:

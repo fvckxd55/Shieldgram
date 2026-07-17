@@ -3,16 +3,27 @@ requires = ["setuptools>=75.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "botshield"
+name = "shieldgram"
 version = "0.1.0"
-description = "Open-source middleware for protecting Telegram bots from automated attacks"
+description = "Anti-abuse security middleware for Telegram bots"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.11"
 authors = [
-    {name = "BotShield Team"},
+    {name = "Shieldgram Team"},
 ]
-keywords = ["telegram", "aiogram", "security", "rate-limiting", "anti-spam"]
+keywords = [
+    "telegram",
+    "telegram-bot",
+    "aiogram",
+    "security",
+    "anti-spam",
+    "anti-abuse",
+    "rate-limiting",
+    "middleware",
+    "cybersecurity",
+    "opensource",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Framework :: aiogram",
@@ -45,7 +56,7 @@ dashboard = [
     "sqlalchemy[asyncio]>=2.0",
 ]
 all = [
-    "botshield[dev,dashboard]",
+    "shieldgram[dev,dashboard]",
 ]
 
 [tool.ruff]

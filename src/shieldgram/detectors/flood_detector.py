@@ -80,7 +80,7 @@ class FloodDetector(AbstractDetector):
         """Проверить взрывную частоту сообщений."""
         now = time.time()
         self._burst_counter += 1
-        prefix = f"botshield:fd:burst:{user_id}"
+        prefix = f"shieldgram:fd:burst:{user_id}"
         member = f"{now}:{self._burst_counter}"
 
         await self._storage.add_to_sorted_set(prefix, now, member)
@@ -109,7 +109,7 @@ class FloodDetector(AbstractDetector):
         if content_hash is None:
             return 0.0
 
-        key = f"botshield:fd:repeat:{user_id}:{content_hash}"
+        key = f"shieldgram:fd:repeat:{user_id}:{content_hash}"
 
         last_count_str = await self._storage.get(key)
         last_count = int(last_count_str) if last_count_str else 0

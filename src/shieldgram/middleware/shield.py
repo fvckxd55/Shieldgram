@@ -17,7 +17,6 @@ from ..detectors.spam_detector import SpamDetector
 from ..engine.decision import DecisionEngine
 from ..engine.detection import DetectionEngine
 from ..reputation.engine import ReputationEngine
-from ..storage.postgres import PostgresStorage
 from ..storage.redis import RedisStorage
 from ..types import DetectionVerdict
 
@@ -42,8 +41,9 @@ class Shield(BaseMiddleware):
             key_prefix=self._config.redis_key_prefix,
         )
 
-        self._postgres: PostgresStorage | None = None
+        self._postgres: Any = None
         if self._config.postgres_url:
+            from ..storage.postgres import PostgresStorage
             self._postgres = PostgresStorage(self._config.postgres_url)
 
         self._detectors = [

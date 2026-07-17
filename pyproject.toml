@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=75.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "botshield"
+version = "0.1.0"
+description = "Open-source middleware for protecting Telegram bots from automated attacks"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [
+    {name = "BotShield Team"},
+]
+keywords = ["telegram", "aiogram", "security", "rate-limiting", "anti-spam"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: aiogram",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+]
+
+dependencies = [
+    "aiogram>=3.7,<4.0",
+    "redis[hiredis]>=5.0,<6.0",
+    "pydantic>=2.0,<3.0",
+    "structlog>=24.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "mypy>=1.10",
+    "ruff>=0.5",
+    "fakeredis[lua]>=2.24",
+]
+dashboard = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "asyncpg>=0.30",
+    "sqlalchemy[asyncio]>=2.0",
+]
+all = [
+    "botshield[dev,dashboard]",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "C4", "RUF"]
+ignore = ["B027", "RUF002"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

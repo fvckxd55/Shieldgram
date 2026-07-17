@@ -4,7 +4,6 @@
 [![Python](https://img.shields.io/pypi/pyversions/shieldgram)](https://pypi.org/project/shieldgram/)
 [![Tests](https://img.shields.io/github/actions/workflow/status/fvckxd55/Shieldgram/tests.yml?branch=master&label=tests)](https://github.com/fvckxd55/Shieldgram/actions)
 [![License](https://img.shields.io/pypi/l/shieldgram)](https://github.com/fvckxd55/Shieldgram/blob/master/LICENSE)
-[![Downloads](https://img.shields.io/pypi/dm/shieldgram)](https://pypi.org/project/shieldgram/)
 
 **Anti-abuse security middleware for Telegram bots.**
 

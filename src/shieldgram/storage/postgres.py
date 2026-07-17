@@ -33,10 +33,10 @@ class PostgresStorage:
         from sqlalchemy import DateTime, Integer, String, Text, func
         from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-        class _Base(DeclarativeBase):  # type: ignore[misc]
+        class _Base(DeclarativeBase):
             pass
 
-        class _DetectionLog(_Base):  # type: ignore[misc]
+        class _DetectionLog(_Base):
             __tablename__ = "detection_logs"
 
             id: Mapped[int] = mapped_column(
